@@ -85,3 +85,62 @@ JSX Syntax Rules:
 Elements must be closed (e.g., <br />).
 You can only return one element (wrap elements in a parent <div> or use <React.Fragment>).
 JavaScript expressions must be inside {}.
+
+
+import React, { useState, useEffect } from 'react';
+
+const Hero = () => {
+  // Defining the Counter component directly inside Hero
+  const Counter = () => {
+    const numbers = [
+      {
+        value: 'One',
+        color: 'blue'
+      },
+      {
+        value: 'Two',
+        color: 'green'
+      },
+      {
+        value: 'Three',
+        color: 'red'
+      }
+    ];
+    const [count, setCount] = useState(0);
+
+    // Timer logic using useEffect
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCount(prevCount => (prevCount < numbers.length - 1 ? prevCount + 1 : 0));
+      }, 1000); // Updates every 1 second
+
+      // Clean up the interval on component unmount
+      return () => clearInterval(timer);
+    }, [numbers.length]);
+
+    return (
+      <div>
+        {/* Displaying the value and applying dynamic color */}
+        <span style={{ color: numbers[count].color }}>
+          Current value: {numbers[count].value}
+        </span>
+        <br />
+        <button onClick={() => setCount((count + 1) % numbers.length)}>Click</button>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <h1>Welcome to the Hero Section!</h1>
+      <Counter />
+    </div>
+  );
+};
+
+export default Hero;
+Key Changes:
+Displaying value and color: Instead of showing the whole object, it now displays numbers[count].value and applies numbers[count].color as the text color.
+Style Update: The span now uses the color property from each object in the numbers array.
+Button Update: The button click logic now wraps back to 0 using modulus ((count + 1) % numbers.length) to ensure the counter cycles properly.
+Now, each second, the displayed value will change according to the value and the text will change color as defined in the array. You can also manually cycle through the values using the button.
